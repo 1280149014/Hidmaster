@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/background_white">
+
+    <!-- 鼠标控制区域 -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginHorizontal="6dp"
+        android:background="@drawable/home_bg">
+
+        <!-- 鼠标指针 -->
+        <ImageView
+            android:id="@+id/iv_mouse_pointer"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_mouse_pointer" />
+
+        <!-- 鼠标区域背景 -->
+        <com.lq.hid1.view.PressureShadowView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/mouse_area"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="0dp"/>
+
+        <!-- 滚动条 -->
+        <View
+            android:id="@+id/scrollbar"
+            android:layout_width="4dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="8dp"
+            android:background="#4CC9F0" />
+
+    </RelativeLayout>
+
+    <!-- 底部按钮区域 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/background_white"
+        android:paddingHorizontal="8dp"
+        android:gravity="center_horizontal"
+        android:layout_marginBottom="12dp"
+        android:paddingTop="0dp">
+
+        <!-- 左按钮 -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_left_click"
+            android:layout_width="0dp"
+            android:layout_height="70dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="8dp"
+            android:backgroundTint="#327BA6"
+            android:padding="12dp"
+            android:text="Left Click"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            app:cornerRadius="8dp" />
+
+        <!-- 右按钮 -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_right_click"
+            android:layout_width="0dp"
+            android:layout_height="70dp"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:backgroundTint="#327BA6"
+            android:padding="12dp"
+            android:text="Right Click"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            app:cornerRadius="8dp" />
+
+    </LinearLayout>
+
+</LinearLayout>

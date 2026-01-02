@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/dialog_bg"
+    android:layout_marginHorizontal="5dp"
+    android:visibility="gone"
+    tools:visibility="visible"
+    android:padding="16dp">
+
+    <!-- 左侧图标 -->
+    <ImageView
+        android:id="@+id/iv_warning"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="#FFFFFF"
+        android:clipToOutline="true"
+        android:padding="8dp"
+        android:scaleType="centerInside"
+        android:shape="oval"
+        android:src="@drawable/ic_bluetooth_disabled"
+        android:tint="#FF5252"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- 提示文字 -->
+    <TextView
+        android:id="@+id/tv_message"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:text="Click the button below to configure the device you want to control"
+        android:textColor="#B72424"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/iv_warning"
+        app:layout_constraintTop_toTopOf="@id/iv_warning" />
+
+    <!-- 按钮 -->
+    <Button
+        android:id="@+id/btn_connection_setup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/button_red_border"
+        android:text="Setup remote device"
+        android:textColor="#B72424"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_message" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

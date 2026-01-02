@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">Hid1</string>
+    <string name="navigation_drawer_open">打开导航抽屉</string>
+    <string name="navigation_drawer_close">关闭导航抽屉</string>
+    <string name="not_connected">Not Connected</string>
+
+    <string name="btn_discover">🔎</string>
+    <string name="btn_left">◀️</string>
+    <string name="btn_right">▶️</string>
+    <string name="btn_up">🔼</string>
+    <string name="btn_down">🔽</string>
+    <string name="btn_middle">⏺️</string>
+
+    <string name="btn_back">🔙</string>
+    <string name="btn_home">🏠</string>
+    <string name="btn_power">⛔</string>
+    <string name="btn_mute">🔇</string>
+    <string name="btn_menu">☰</string>
+    <string name="btn_gear">⚙️</string>
+    <string name="btn_vol_up">🔊</string>
+    <string name="btn_vol_down">🔉</string>
+    <string name="btn_play_pause">⏯️</string>
+    <string name="btn_rewind">⏪</string>
+    <string name="btn_forward">⏩</string>
+
+    <string name="play_pause">Play/Pause</string>
+    <string name="vol_inc">Vol+</string>
+    <string name="vol_dec">Vol-</string>
+    <string name="type_text_here">⌨ Type text here to send</string>
+    <string name="cursor_sensitivity">Cursor Sensitivity</string>
+    <string name="title_activity_fullscreen2">FullscreenActivity2</string>
+</resources>

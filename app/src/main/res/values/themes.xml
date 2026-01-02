@@ -1,0 +1,39 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.Hid1" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <item name="colorPrimary">@color/white</item>
+    </style>
+
+    <style name="Theme.Hid1" parent="Base.Theme.Hid1" />
+
+    <style name="AppTheme"  parent="Theme.Hid1" />
+
+    <style name="DialogTopAnimation">
+        <item name="android:windowEnterAnimation">@anim/slide_in_top</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_top</item>
+    </style>
+
+    <!-- 启动页主题（仅用于冷启动过渡） -->
+    <style name="AppStartupTheme" parent="Base.Theme.Hid1">
+        <!-- 1. 设置启动背景图（推荐，与启动页UI一致） -->
+
+        <!-- 2. 或设置纯色背景（避免拉伸） -->
+        <!-- <item name="android:windowBackground">@color/white</item> -->
+        <!-- 隐藏状态栏和导航栏（可选，根据需求） -->
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+    <style name="notification_button_style" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:textSize">50sp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:padding">2dp</item>
+    </style>
+
+</resources>

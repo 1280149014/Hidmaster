@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingHorizontal="14dp"
+    android:fitsSystemWindows="true"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="16dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/back"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_back"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bluetooth Permission Required"
+            android:layout_marginStart="10dp"
+            android:textSize="20sp"
+            android:textColor="@android:color/black" />
+
+    </LinearLayout>
+
+
+    <!-- 蓝牙图标 -->
+    <ImageView
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:src="@drawable/ic_bluetooth_disabled"
+        android:tint="@color/design_default_color_primary"
+        android:layout_above="@id/warning_text"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="24dp"/>
+
+    <!-- 权限提示文本 -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="To remotely control a device, you first need to grant &quot;Bluetooth Keyboard &amp; Mouse&quot; permission for &quot;Nearby devices&quot;"
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:textAlignment="center"
+        android:gravity="center_vertical"
+        android:layout_centerVertical="true"
+        android:lineSpacingExtra="4dp"
+        android:id="@+id/warning_text"
+        android:layout_marginBottom="32dp"/>
+
+    <!-- 打开设置按钮 -->
+    <Button
+        android:id="@+id/btn_open_settings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Open settings"
+        android:layout_below="@id/warning_text"
+        android:layout_centerHorizontal="true"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/design_default_color_primary"/>
+
+</RelativeLayout>
