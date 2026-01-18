@@ -39,15 +39,22 @@
         app:layout_constraintTop_toTopOf="@id/iv_warning" />
 
     <!-- 按钮 -->
-    <Button
-        android:id="@+id/btn_connection_setup"
+
+    <!-- Connect按钮 -->
+    <androidx.appcompat.widget.AppCompatButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/button_red_border"
-        android:text="Setup remote device"
-        android:textColor="#B72424"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_message" />
+        android:layout_gravity="end"
+        android:id="@+id/btn_connection_setup"
+        android:background="@drawable/button_bg"
+        android:paddingHorizontal="@dimen/normal_margin"
+        android:paddingVertical="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/tv_message"
+        app:layout_constraintTop_toBottomOf="@id/tv_message"
+        android:text="@string/setup_remote_device"
+        android:layout_marginTop="@dimen/normal_margin"
+        android:textColor="#B71C1C"
+        android:textSize="@dimen/title_size4" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
