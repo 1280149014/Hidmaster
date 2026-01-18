@@ -132,6 +132,9 @@
                 android:id="@+id/bluetooth_Not_Connected_prompt"
                 layout="@layout/dialog_bluetooth_not_connected_prompt"/>
 
+            <include
+                android:id="@+id/bluetooth_Connect_failed_prompt"
+                layout="@layout/dialog_bluetooth_connect_failed"/>
         </RelativeLayout>
 
     </LinearLayout>

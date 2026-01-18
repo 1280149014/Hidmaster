@@ -88,6 +88,8 @@ public class MainActivity extends AppCompatActivity
 
     private View mBluetoothEnableView;
     private View mBtNotConnectedPrompt;
+
+    private View mBtHidConnectedFailed;
     private View mBtConnectionBtn;
     private Button mBtnEnable;
     BluetoothStateReceiver mBluetoothReceiver;
@@ -170,6 +172,7 @@ public class MainActivity extends AppCompatActivity
         }
         if (BluetoothHidService.bluetoothDevice != null) {
             startService(BluetoothHidService.bluetoothDevice, isNotificationRefused);
+            mBtNotConnectedPrompt.setVisibility(GONE);
         }
     }
 
@@ -193,6 +196,7 @@ public class MainActivity extends AppCompatActivity
         mBtnEnable = findViewById(R.id.btn_enable);
         mBtNotConnectedPrompt = findViewById(R.id.bluetooth_Not_Connected_prompt);
         mBtConnectionBtn = findViewById(R.id.btn_connection_setup);
+        mBtHidConnectedFailed = findViewById(R.id.bluetooth_Connect_failed_prompt);
         // 获取Toolbar内部子控件
         toolbarMenu = toolbar.findViewById(R.id.toolbar_menu);
         toolbarTitle = toolbar.findViewById(R.id.toolbar_title);

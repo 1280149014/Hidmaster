@@ -19,6 +19,7 @@
         android:clipToOutline="true"
         android:padding="8dp"
         android:scaleType="centerInside"
+        android:outlineProvider="bounds"
         android:shape="oval"
         android:src="@drawable/ic_bluetooth_disabled"
         android:tint="#FF5252"
@@ -39,13 +40,15 @@
         app:layout_constraintTop_toTopOf="@id/iv_warning" />
 
     <!-- 按钮 -->
-    <Button
+    <TextView
         android:id="@+id/btn_connection_setup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:background="@drawable/button_red_border"
-        android:text="Setup remote device"
+        android:paddingHorizontal="@dimen/normal_margin"
+        android:paddingVertical="@dimen/normal_margin2"
+        android:background="@drawable/button_bg"
+        android:text="@string/setup_remote_device"
         android:textColor="#B72424"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_message" />

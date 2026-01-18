@@ -2,9 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginHorizontal="@dimen/normal_margin4"
     android:background="@drawable/dialog_bg"
     android:orientation="horizontal"
+    android:visibility="gone"
+    tools:visibility="visible"
     android:padding="16dp">
 
     <!-- 左侧图标 -->
@@ -23,6 +26,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/normal_margin"
         android:orientation="vertical">
 
         <!-- 弹窗标题 -->
@@ -30,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
-            android:text="Bluetooth connection failed"
+            android:text="@string/bluetooth_connection_failed"
             android:textColor="#B71C1C"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -39,19 +43,20 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            android:text="Make sure Bluetooth is enabled on the remote device."
+            android:layout_marginBottom="@dimen/normal_margin"
+            android:text="@string/remote_device_state_notice"
             android:textColor="#D32F2F"
             android:textSize="16sp" />
 
         <!-- Connect按钮 -->
-        <androidx.appcompat.widget.AppCompatButton
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:paddingHorizontal="24dp"
             android:paddingVertical="12dp"
-            android:text="Connect"
+            android:background="@drawable/button_bg"
+            android:text="@string/connect"
             android:textColor="#B71C1C"
             android:textSize="16sp" />
 
