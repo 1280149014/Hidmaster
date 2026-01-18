@@ -64,7 +64,7 @@ public class DeviceTypeUtils {
     public static int getDeviceIconResId(int deviceType) {
         switch (deviceType) {
             case BluetoothDeviceItem.DEVICE_TYPE_PHONE:
-                return R.drawable.ic_phone;  // 手机图标
+                return R.drawable.ic_phone_round;  // 手机图标
 
             case BluetoothDeviceItem.DEVICE_TYPE_HEADSET:
                 return R.drawable.ic_headset;  // 耳机图标
@@ -79,7 +79,7 @@ public class DeviceTypeUtils {
                 return R.drawable.ic_car;  // 车载设备图标
 
             default:
-                return R.drawable.ic_bluetooth;  // 默认蓝牙图标
+                return R.drawable.ic_bluetooth_round;  // 默认蓝牙图标
         }
     }
 

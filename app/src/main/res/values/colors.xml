@@ -20,4 +20,8 @@
 
     <color name="toobar_color">#ff333333</color>
 
+    <color name="text_color_black">#ff000000</color>
+    <color name="text_color_black1_5">#bf000000</color>
+    <color name="text_color_black2">#8f000000</color>
+
 </resources>

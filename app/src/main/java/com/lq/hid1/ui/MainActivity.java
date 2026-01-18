@@ -168,6 +168,9 @@ public class MainActivity extends AppCompatActivity
         } else {
             mBluetoothEnableView.setVisibility(GONE);;
         }
+        if (BluetoothHidService.bluetoothDevice != null) {
+            startService(BluetoothHidService.bluetoothDevice, isNotificationRefused);
+        }
     }
 
     @Override

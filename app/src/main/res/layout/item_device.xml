@@ -10,9 +10,10 @@
     <!-- 复选框 -->
     <ImageView
         android:id="@+id/cb_device"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_phone"
+        android:layout_width="@dimen/img_size1"
+        android:layout_height="@dimen/img_size1"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_phone_round"
         android:layout_marginEnd="12dp"/>
 
     <!-- 设备名称 -->

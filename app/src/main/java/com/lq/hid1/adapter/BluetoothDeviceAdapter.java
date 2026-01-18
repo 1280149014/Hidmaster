@@ -45,9 +45,8 @@ public class BluetoothDeviceAdapter extends RecyclerView.Adapter<BluetoothDevice
 
         holder.deviceName.setText(device.getDeviceName());
         holder.deviceStatus.setText(device.getStatus());
-        holder.deviceIcon.setImageResource(device.getIconResId());
+        holder.deviceIcon.setImageResource(device.getImageResId());
 
-        // 根据支持状态设置不同颜色
         if (!device.isSupported()) {
             holder.deviceStatus.setTextColor(Color.parseColor("#FF5252")); // 红色提示
         } else {
@@ -55,12 +54,9 @@ public class BluetoothDeviceAdapter extends RecyclerView.Adapter<BluetoothDevice
         }
 
         // 点击事件
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (listener != null) {
-                    listener.onItemClick(holder.getAdapterPosition());
-                }
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onItemClick(holder.getAdapterPosition());
             }
         });
     }
