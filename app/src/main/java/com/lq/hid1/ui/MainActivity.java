@@ -37,6 +37,7 @@ import androidx.activity.OnBackPressedDispatcher;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresPermission;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -51,6 +52,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.navigation.NavigationView;
 import com.lq.hid1.R;
+import com.lq.hid1.Utils.SharedPreferencesUtils;
 import com.lq.hid1.adapter.DeviceListAdapter;
 import com.lq.hid1.bt.BluetoothHidService;
 
@@ -94,6 +96,7 @@ public class MainActivity extends AppCompatActivity
     private Button mBtnEnable;
     BluetoothStateReceiver mBluetoothReceiver;
 
+    @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -168,7 +171,8 @@ public class MainActivity extends AppCompatActivity
         if (!bluetoothAdapter.isEnabled()) {
             mBluetoothEnableView.setVisibility(VISIBLE);
         } else {
-            mBluetoothEnableView.setVisibility(GONE);;
+            mBluetoothEnableView.setVisibility(GONE);
+            ;
         }
         if (BluetoothHidService.bluetoothDevice != null) {
             startService(BluetoothHidService.bluetoothDevice, isNotificationRefused);
@@ -188,6 +192,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
     private void initViews() {
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
@@ -259,15 +264,15 @@ public class MainActivity extends AppCompatActivity
                 public void handleMessage(@NonNull Message msg) {
                     super.handleMessage(msg);
                     switch (msg.what) {
-                        case BluetoothHidService.STATUS.BLUETOOTH_DISCONNECTED:{
+                        case BluetoothHidService.STATUS.BLUETOOTH_DISCONNECTED: {
                             Log.d(TAG, "Bluetooth disconnected");
                             break;
                         }
-                        case BluetoothHidService.STATUS.BLUETOOTH_CONNECTING : {
+                        case BluetoothHidService.STATUS.BLUETOOTH_CONNECTING: {
                             Log.d(TAG, "Bluetooth connecting");
                             break;
                         }
-                        case BluetoothHidService.STATUS.BLUETOOTH_CONNECTED :{
+                        case BluetoothHidService.STATUS.BLUETOOTH_CONNECTED: {
                             Log.d(TAG, "Bluetooth connected");
                             break;
                         }
@@ -277,7 +282,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    // 显示设备选择弹窗
+    @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
     private void showDeviceSelectPopup(View anchorView) {
         // 1. 获取 BluetoothAdapter
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -315,9 +320,7 @@ public class MainActivity extends AppCompatActivity
             if (mDevicePopup != null && mDevicePopup.isShowing()) {
                 mDevicePopup.dismiss();
             }
-            Intent intent = new Intent(Settings.ACTION_BLUETOOTH_SETTINGS);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // 避免在非 Activity 上下文中崩溃
-            startActivity(intent);
+            showConnectionActivity();
         });
 
         // 6. 创建并显示 PopupWindow
@@ -332,18 +335,28 @@ public class MainActivity extends AppCompatActivity
         mDevicePopup.showAsDropDown(anchorView, 0, 0, Gravity.START);
     }
 
+    @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
     private void updateSelectedDeviceName() {
-        try {
-            List<BluetoothDevice> deviceList = getStrings(bluetoothAdapter);
-            if (deviceList.isEmpty()) {
+        List<BluetoothDevice> deviceList = getStrings(bluetoothAdapter);
+        if (deviceList.isEmpty()) {
+            selectDeviceName.setText(R.string.not_connected);
+            mBtNotConnectedPrompt.setVisibility(VISIBLE);
+        } else {
+            BluetoothDevice lastConnectedDevice = null;
+            for (BluetoothDevice device : deviceList) {
+                String lastDeviceAddress = SharedPreferencesUtils.getLastDevice(getApplication());
+                if (device.getAddress().equals(lastDeviceAddress)) {
+                    lastConnectedDevice = device;
+                    break;
+                }
+            }
+            if (lastConnectedDevice == null) {
                 selectDeviceName.setText(R.string.not_connected);
                 mBtNotConnectedPrompt.setVisibility(VISIBLE);
             } else {
-                selectDeviceName.setText(deviceList.get(0).getName());
+                selectDeviceName.setText(lastConnectedDevice.getName());
                 mBtNotConnectedPrompt.setVisibility(GONE);
             }
-        } catch (SecurityException e) {
-            Log.w(TAG, "updateSelectedDeviceName:", e);
         }
     }
 
@@ -376,9 +389,9 @@ public class MainActivity extends AppCompatActivity
         try {
             Set<BluetoothDevice> bondedDevices = bluetoothAdapter.getBondedDevices();
             if (bondedDevices != null && !bondedDevices.isEmpty()) {
-                for(BluetoothDevice device : bondedDevices) {
+                for (BluetoothDevice device : bondedDevices) {
                     Log.e(TAG, "Found bonded device: " + device.getName() + " - " + device.getAddress()
-                        + " - UUIDs: " + (device.getUuids() != null ? device.getUuids().toString() : "null"));
+                            + " - UUIDs: " + (device.getUuids() != null ? device.getUuids().toString() : "null"));
                     if (isHidHostSupported(device)) {
                         deviceList.add(device);
                     }
@@ -526,6 +539,7 @@ public class MainActivity extends AppCompatActivity
 
     // 蓝牙状态广播接收器
     private class BluetoothStateReceiver extends BroadcastReceiver {
+        @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
@@ -562,19 +576,19 @@ public class MainActivity extends AppCompatActivity
                         break;
                 }
             } else if (BluetoothDevice.ACTION_BOND_STATE_CHANGED.equals(action)) {
-                    BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                    int bondState = intent.getIntExtra(BluetoothDevice.EXTRA_BOND_STATE, -1);
-                    if (bondState == BluetoothDevice.BOND_BONDED && device != null) {
-                        String deviceName = device.getName();
-                        String deviceHardwareAddress = device.getAddress(); // MAC address
-                        Log.d(TAG, "Bonding completed with " + deviceName + ", " + deviceHardwareAddress);
-                        //TODO: Connect device right away
+                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                int bondState = intent.getIntExtra(BluetoothDevice.EXTRA_BOND_STATE, -1);
+                if (bondState == BluetoothDevice.BOND_BONDED && device != null) {
+                    String deviceName = device.getName();
+                    String deviceHardwareAddress = device.getAddress(); // MAC address
+                    Log.d(TAG, "Bonding completed with " + deviceName + ", " + deviceHardwareAddress);
+                    //TODO: Connect device right away
 //                        debug("Starting Service with device " + deviceName);
 //                        populateBondedDevices();
 //                        cmbBondedDevices.setSelection(0);
 //                        startService(device);
 //                        bluetoothAdapter.getProfileProxy(MainActivity.this, MainActivity.this, BluetoothProfile.HID_DEVICE);
-                    }
+                }
             }
         }
     }

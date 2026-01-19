@@ -1,6 +1,7 @@
 package com.lq.hid1.bt;
 
 import android.annotation.SuppressLint;
+import android.app.Application;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -13,7 +14,9 @@ import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
 import android.content.ComponentName;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Binder;
+import android.os.Build;
 import android.os.IBinder;
 import android.os.Message;
 import android.util.Log;
@@ -21,6 +24,7 @@ import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
 import com.lq.hid1.ui.MainActivity;
@@ -214,6 +218,7 @@ public class BluetoothHidService extends Service implements BluetoothProfile.Ser
         //releaseBluetooth();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.P)
     @SuppressLint("MissingPermission")
     private void releaseBluetooth() {
         bluetoothHidDevice.unregisterApp();
@@ -239,6 +244,7 @@ public class BluetoothHidService extends Service implements BluetoothProfile.Ser
         return START_STICKY;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.P)
     @SuppressLint("MissingPermission")
     @Override
     public void onServiceConnected(int profile, BluetoothProfile proxy) {

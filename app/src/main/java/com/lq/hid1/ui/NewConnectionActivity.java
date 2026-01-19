@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.lq.hid1.R;
 import com.lq.hid1.Utils.DeviceTypeUtils;
+import com.lq.hid1.Utils.SharedPreferencesUtils;
 import com.lq.hid1.adapter.BluetoothDeviceAdapter;
 import com.lq.hid1.bean.BluetoothDeviceItem;
 import com.lq.hid1.bt.BluetoothHidService;
@@ -30,7 +31,7 @@ public class NewConnectionActivity extends AppCompatActivity {
     RecyclerView deviceRecyclerView;
     Button newDeviceBtn;
 
-    @RequiresPermission(Manifest.permission.BLUETOOTH_SCAN)
+    @RequiresPermission(allOf = {Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_CONNECT})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,6 +99,7 @@ public class NewConnectionActivity extends AppCompatActivity {
 
     private void connectToDevice(BluetoothDeviceItem item) {
         BluetoothHidService.bluetoothDevice = item.device;
+        SharedPreferencesUtils.saveLastDevice(getApplication(), item.device);
         finish();
     }
 
