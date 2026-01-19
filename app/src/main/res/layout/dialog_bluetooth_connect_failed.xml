@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?><!-- 粉色弹窗背景 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginHorizontal="@dimen/normal_margin4"
     android:background="@drawable/dialog_bg"
     android:orientation="horizontal"
+    android:padding="16dp"
     android:visibility="gone"
-    tools:visibility="visible"
-    android:padding="16dp">
+    tools:visibility="visible">
 
     <!-- 左侧图标 -->
     <ImageView
-        android:id="@+id/iv_warning"
+        android:id="@+id/iv_warning2"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:background="#FFFFFF"
@@ -21,7 +23,8 @@
         android:scaleType="centerInside"
         android:shape="oval"
         android:src="@drawable/ic_bluetooth_disabled"
-        android:tint="#FF5252" />
+        app:tint="#FF5252"
+        tools:targetApi="31" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -53,7 +56,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:paddingHorizontal="24dp"
+            android:background="@drawable/button_bg"
+            android:paddingHorizontal="@dimen/normal_margin"
             android:paddingVertical="12dp"
             android:background="@drawable/button_bg"
             android:text="@string/connect"
