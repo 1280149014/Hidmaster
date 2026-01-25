@@ -29,6 +29,7 @@
     <string name="type_text_here">⌨ Type text here to send</string>
     <string name="cursor_sensitivity">Cursor Sensitivity</string>
     <string name="title_activity_fullscreen2">FullscreenActivity2</string>
+
     <string name="remote_device_state_notice">Make sure Bluetooth is enabled on the remote device.</string>
     <string name="bluetooth_connection_failed">Bluetooth connection failed</string>
     <string name="connect">Connect</string>
