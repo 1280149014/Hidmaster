@@ -34,4 +34,5 @@
     <string name="bluetooth_connection_failed">Bluetooth connection failed</string>
     <string name="connect">Connect</string>
     <string name="setup_remote_device">Setup remote device</string>
+    <string name="unnamed_device">Unnamed device</string>
 </resources>

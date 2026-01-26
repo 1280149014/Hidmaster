@@ -4,6 +4,7 @@ import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
 import android.Manifest;
+import android.animation.ValueAnimator;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
@@ -26,6 +27,7 @@ import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
@@ -81,6 +83,8 @@ public class MainActivity extends AppCompatActivity
     private View connectionStatus;     // 中间状态文本
     private ImageView toolbarKeyboard;  // 右侧键盘图标
     private ImageView toolbarSetting;   // 右侧设置图标
+    private View loadingBar;
+    private ValueAnimator loadingAnimator;
     private PopupWindow mDevicePopup;
     private static final int REQUEST_ENABLE_BLUETOOTH = 1001;
     private BluetoothAdapter bluetoothAdapter;
@@ -164,10 +168,12 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
     @Override
     protected void onResume() {
         super.onResume();
         Log.d(TAG, "onResume: Checking Bluetooth status");
+        updateSelectedDeviceName();
         if (!bluetoothAdapter.isEnabled()) {
             mBluetoothEnableView.setVisibility(VISIBLE);
         } else {
@@ -247,6 +253,12 @@ public class MainActivity extends AppCompatActivity
         };
 
         dispatcher.addCallback(this, callback);
+
+        // 1. 绑定加载条View
+        loadingBar = findViewById(R.id.loading_bar);
+
+        // 2. 启动横向反复伸缩加载动画
+        startHorizontalLoadingAnimation();
     }
 
     private void showConnectionActivity() {
@@ -309,14 +321,11 @@ public class MainActivity extends AppCompatActivity
             }
             mSelectedDevice = device;
             startService(device, isNotificationRefused);
-
-            // TODO: 你可以在这里通过位置或名称反查 BluetoothDevice 对象（见下方说明）
         });
         rvDeviceList.setAdapter(adapter);
 
         // 5. 底部“添加设备”按钮点击事件
         btnSetupRemote.setOnClickListener(v -> {
-            Toast.makeText(this, "开始添加远程设备", Toast.LENGTH_SHORT).show();
             if (mDevicePopup != null && mDevicePopup.isShowing()) {
                 mDevicePopup.dismiss();
             }
@@ -337,26 +346,57 @@ public class MainActivity extends AppCompatActivity
 
     @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
     private void updateSelectedDeviceName() {
-        List<BluetoothDevice> deviceList = getStrings(bluetoothAdapter);
-        if (deviceList.isEmpty()) {
+        BluetoothDevice lastConnectedDevice = null;
+        for (BluetoothDevice device : bluetoothAdapter.getBondedDevices()) {
+            String lastDeviceAddress = SharedPreferencesUtils.getLastDevice(getApplication());
+            if (device.getAddress().equals(lastDeviceAddress)) {
+                lastConnectedDevice = device;
+                break;
+            }
+        }
+        if (lastConnectedDevice != null) {
+            selectDeviceName.setText(lastConnectedDevice.getName());
+            mBtNotConnectedPrompt.setVisibility(GONE);
+            return;
+        } else {
             selectDeviceName.setText(R.string.not_connected);
             mBtNotConnectedPrompt.setVisibility(VISIBLE);
-        } else {
-            BluetoothDevice lastConnectedDevice = null;
-            for (BluetoothDevice device : deviceList) {
-                String lastDeviceAddress = SharedPreferencesUtils.getLastDevice(getApplication());
-                if (device.getAddress().equals(lastDeviceAddress)) {
-                    lastConnectedDevice = device;
-                    break;
-                }
-            }
-            if (lastConnectedDevice == null) {
-                selectDeviceName.setText(R.string.not_connected);
-                mBtNotConnectedPrompt.setVisibility(VISIBLE);
-            } else {
-                selectDeviceName.setText(lastConnectedDevice.getName());
-                mBtNotConnectedPrompt.setVisibility(GONE);
-            }
+        }
+    }
+
+    /**
+     * 启动基础版横向伸缩反复动画
+     */
+    private void startHorizontalLoadingAnimation() {
+        // 若动画已在运行，直接返回
+        if (loadingAnimator != null && loadingAnimator.isRunning()) {
+            return;
+        }
+
+        // 核心：控制scaleX从0→1（全宽），再从1→0，无限循环
+        loadingAnimator = ValueAnimator.ofFloat(0f, 1f);
+        loadingAnimator.setDuration(1500); // 单次伸缩时长（毫秒），数值越小越快
+        loadingAnimator.setInterpolator(new LinearInterpolator()); // 线性插值器，匀速伸缩
+        loadingAnimator.setRepeatCount(ValueAnimator.INFINITE); // 无限循环（加载中持续运行）
+        loadingAnimator.setRepeatMode(ValueAnimator.REVERSE); // 反向重复（0→1→0，实现反复）
+
+        // 动画更新监听：更新加载条的横向缩放比例
+        loadingAnimator.addUpdateListener(animation -> {
+            float scaleX = (float) animation.getAnimatedValue();
+            loadingBar.setScaleX(scaleX);
+        });
+
+        // 启动动画
+        loadingAnimator.start();
+    }
+
+    /**
+     * 停止加载动画（加载完成时调用）
+     */
+    private void stopLoadingAnimation() {
+        if (loadingAnimator != null && loadingAnimator.isRunning()) {
+            loadingAnimator.cancel();
+            loadingBar.setScaleX(0); // 重置加载条为隐藏状态
         }
     }
 

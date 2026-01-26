@@ -1,6 +1,7 @@
 package com.lq.hid1.adapter;
 
 import android.graphics.Color;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,13 +43,17 @@ public class BluetoothDeviceAdapter extends RecyclerView.Adapter<BluetoothDevice
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         BluetoothDeviceItem device = deviceList.get(position);
-
-        holder.deviceName.setText(device.getDeviceName());
+        if (TextUtils.isEmpty(device.getDeviceName())) {
+            holder.deviceName.setText(R.string.unnamed_device);
+        } else {
+            holder.deviceName.setText(device.getDeviceName());
+        }
         holder.deviceStatus.setText(device.getStatus());
         holder.deviceIcon.setImageResource(device.getImageResId());
 
         if (!device.isSupported()) {
-            holder.deviceStatus.setTextColor(Color.parseColor("#FF5252")); // 红色提示
+            //holder.deviceStatus.setTextColor(Color.parseColor("#FF5252")); // 红色提示
+            holder.deviceStatus.setTextColor(Color.parseColor("#757575")); // 红色提示
         } else {
             holder.deviceStatus.setTextColor(Color.parseColor("#757575")); // 灰色提示
         }

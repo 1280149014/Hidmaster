@@ -11,18 +11,19 @@
     android:padding="16dp">
 
     <!-- 左侧图标 -->
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/iv_warning"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:background="#FFFFFF"
         android:clipToOutline="true"
-        android:padding="8dp"
+        android:padding="4dp"
         android:scaleType="centerInside"
         android:outlineProvider="bounds"
         android:shape="oval"
-        android:src="@drawable/ic_bluetooth_disabled"
+        app:srcCompat="@drawable/ic_bluetooth_disabled"
         android:tint="#FF5252"
+        app:shapeAppearanceOverlay="@style/ShapeAppearance.circle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

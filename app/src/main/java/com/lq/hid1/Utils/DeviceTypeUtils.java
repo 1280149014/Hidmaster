@@ -112,16 +112,18 @@ public class DeviceTypeUtils {
 
         // 一些常见不支持的设备类型
         switch (majorClass) {
-            case BluetoothClass.Device.Major.HEALTH:
-                return false;
-
             case BluetoothClass.Device.Major.AUDIO_VIDEO:
                 // 某些特殊音频设备可能不支持
-                if (deviceClass == BluetoothClass.Device.AUDIO_VIDEO_VIDEO_DISPLAY_AND_LOUDSPEAKER) {
+                if (deviceClass == BluetoothClass.Device.AUDIO_VIDEO_VIDEO_DISPLAY_AND_LOUDSPEAKER
+                    || deviceClass == BluetoothClass.Device.AUDIO_VIDEO_WEARABLE_HEADSET
+                    || deviceClass == BluetoothClass.Device.AUDIO_VIDEO_HEADPHONES) {
                     return false;
                 }
                 return true;
-
+            case BluetoothClass.Device.Major.HEALTH:
+            case BluetoothClass.Device.Major.TOY:
+            case BluetoothClass.Device.Major.PERIPHERAL:
+                return false;
             default:
                 return true;
         }

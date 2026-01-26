@@ -36,4 +36,9 @@
         <item name="android:padding">2dp</item>
     </style>
 
+    <style name="ShapeAppearance.circle" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
 </resources>
