@@ -23,4 +23,6 @@
     <color name="text_color_black2">#8f000000</color>
     <color name="red5">#FFFFC5B5</color>
     <color name="red9">#FFFF7575</color>
+
+    <color name="blue1">#61ACE7</color>
 </resources>

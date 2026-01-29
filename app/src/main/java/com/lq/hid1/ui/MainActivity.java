@@ -278,14 +278,17 @@ public class MainActivity extends AppCompatActivity
                     switch (msg.what) {
                         case BluetoothHidService.STATUS.BLUETOOTH_DISCONNECTED: {
                             Log.d(TAG, "Bluetooth disconnected");
+                            mBtHidConnectedFailed.setVisibility(VISIBLE);
                             break;
                         }
                         case BluetoothHidService.STATUS.BLUETOOTH_CONNECTING: {
                             Log.d(TAG, "Bluetooth connecting");
+                            mBtHidConnectedFailed.setVisibility(GONE);
                             break;
                         }
                         case BluetoothHidService.STATUS.BLUETOOTH_CONNECTED: {
                             Log.d(TAG, "Bluetooth connected");
+                            mBtHidConnectedFailed.setVisibility(GONE);
                             break;
                         }
                     }
