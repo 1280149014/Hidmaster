@@ -5,6 +5,7 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:fitsSystemWindows="true">
 
     <!-- 主内容区域 -->
@@ -29,9 +30,7 @@
                 <ImageView
                     android:id="@+id/toolbar_menu"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:focusable="true"
+                    android:layout_height="0dp"
                     android:contentDescription="菜单"
                     android:paddingHorizontal="16dp"
                     android:visibility="gone"
@@ -45,9 +44,7 @@
                 <ImageView
                     android:id="@+id/toolbar_setting"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:focusable="true"
+                    android:layout_height="0dp"
                     android:contentDescription="设置"
                     android:paddingHorizontal="16dp"
                     android:scaleType="center"
@@ -59,74 +56,88 @@
                 <ImageView
                     android:id="@+id/toolbar_keyboard"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:focusable="true"
+                    android:layout_height="0dp"
                     android:contentDescription="键盘"
                     android:paddingHorizontal="16dp"
                     android:scaleType="center"
                     android:src="@drawable/ic_keyboard"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/toolbar_setting"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintMarginEnd="8dp" /> <!-- 增加右侧图标间距，避免重叠 -->
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                <!-- 中间：标题 + 状态文本（垂直排列，去除冗余 LinearLayout） -->
-                <TextView
-                    android:id="@+id/toolbar_title"
-                    android:layout_width="wrap_content"
+                <!-- 中间：标题 + 状态文本（垂直排列） -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-medium"
-                    android:text="Mouse / Keyboard"
-                    android:layout_marginTop="@dimen/normal_margin"
-                    android:textColor="@android:color/black"
-                    android:textSize="16sp"
-                    app:layout_constraintEnd_toStartOf="@+id/toolbar_keyboard"
-                    app:layout_constraintStart_toEndOf="@+id/toolbar_menu"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintHorizontal_center_horizontal="true" /> <!-- 兜底居中，视觉更美观 -->
-
-                <TextView
-                    android:id="@+id/select_device_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="TCL 55C78-0827 connecting"
-                    android:textColor="@android:color/darker_gray"
-                    android:textSize="12sp"
-                    app:layout_constraintStart_toStartOf="@+id/toolbar_title"
-                    app:layout_constraintTop_toBottomOf="@+id/toolbar_title"
-                    app:layout_constraintMarginTop="2dp" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="2dp"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/array_down"
-                    app:layout_constraintBottom_toBottomOf="@+id/select_device_name"
-                    app:layout_constraintStart_toEndOf="@+id/select_device_name"
-                    app:layout_constraintTop_toTopOf="@+id/select_device_name" />
-
-                <!-- 加载条：修正约束，调整高度，优化缩放属性，默认隐藏 -->
-                <View
-                    android:id="@+id/loading_bar"
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:background="@color/blue1"
-                    android:pivotX="0dp"
-                    android:scaleX="1"
-                    android:visibility="visible"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"/>
+                    app:layout_constraintEnd_toStartOf="@id/toolbar_keyboard"
+                    app:layout_constraintStart_toEndOf="@id/toolbar_menu"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/toolbar_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-medium"
+                        android:text="Mouse / Keyboard"
+                        android:textColor="@android:color/black"
+                        android:textSize="16sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/connection_status"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/toolbar_title"
+                        android:gravity="center_horizontal">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="TCL 55C78-0827 connecting"
+                            android:textColor="@android:color/darker_gray"
+                            android:id="@+id/select_device_name"
+                            android:textSize="12sp" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="2dp"
+                            android:layout_gravity="center_vertical"
+                            android:scaleType="centerInside"
+                            android:src="@drawable/array_down" />
+                    </LinearLayout>
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </com.google.android.material.appbar.MaterialToolbar>
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/loading_layout"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:background="#9ABADF">
+
+            <View
+                android:id="@+id/accelerateView"
+                android:layout_width="20dp"
+                android:layout_height="3dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:background="#0066FF" />
+
+        </RelativeLayout>
+
         <!-- Fragment容器 -->
         <RelativeLayout
             android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/normal_margin6"
             android:layout_height="match_parent">
 
             <FrameLayout

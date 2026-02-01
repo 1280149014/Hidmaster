@@ -1,6 +1,7 @@
 package com.lq.hid1.ui;
 
 import static android.view.View.GONE;
+import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 
 import android.Manifest;
@@ -27,10 +28,12 @@ import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -83,8 +86,11 @@ public class MainActivity extends AppCompatActivity
     private View connectionStatus;     // 中间状态文本
     private ImageView toolbarKeyboard;  // 右侧键盘图标
     private ImageView toolbarSetting;   // 右侧设置图标
-    private View loadingBar;
-    private ValueAnimator loadingAnimator;
+    private ValueAnimator accelerateAnimator;
+    private View accelerateView;
+    private RelativeLayout loadingLayout;
+    // 记录View原始宽度（用于拉伸比例计算）
+    private float originalViewWidth;
     private PopupWindow mDevicePopup;
     private static final int REQUEST_ENABLE_BLUETOOTH = 1001;
     private BluetoothAdapter bluetoothAdapter;
@@ -254,11 +260,50 @@ public class MainActivity extends AppCompatActivity
 
         dispatcher.addCallback(this, callback);
 
-        // 1. 绑定加载条View
-        loadingBar = findViewById(R.id.loading_bar);
+        // 初始化View
+        accelerateView = findViewById(R.id.accelerateView);
+        loadingLayout = findViewById(R.id.loading_layout);
+    }
 
-        // 2. 启动横向反复伸缩加载动画
-        startHorizontalLoadingAnimation();
+    private void startAccelerateAndStretchAnimation() {
+        // 若动画已在运行，先停止再重新启动
+        if (accelerateAnimator != null && accelerateAnimator.isRunning()) {
+            accelerateAnimator.cancel();
+        }
+
+        // 等待布局测量完成，获取准确的宽度值
+        loadingLayout.post(() -> {
+            // 获取View原始宽度（20dp对应的像素值）
+            originalViewWidth = accelerateView.getWidth();
+            // 动画起点：0（最左侧），终点：父容器宽度 - 原始宽度（避免滑出屏幕）
+            float startX = 0f;
+            float endX = loadingLayout.getWidth() - originalViewWidth;
+
+            // 核心：值动画控制平移X（0→endX），同时用这个值计算拉伸比例
+            accelerateAnimator = ValueAnimator.ofFloat(startX, endX);
+            accelerateAnimator.setDuration(1000); // 动画总时长
+            accelerateAnimator.setInterpolator(new AccelerateInterpolator(0.5f)); // 加速插值器
+            accelerateAnimator.setRepeatCount(ValueAnimator.INFINITE); // 无限循环
+            accelerateAnimator.setRepeatMode(ValueAnimator.RESTART); // 重置后重新开始
+
+            // 动画更新监听：同时更新移动位置和拉伸比例
+            accelerateAnimator.addUpdateListener(animation -> {
+                float currentX = (float) animation.getAnimatedValue();
+                // 1. 更新横向移动位置（核心）
+                accelerateView.setTranslationX(currentX);
+
+                // 2. 计算拉伸比例：从1倍（原始宽度）到指定倍数（比如5倍）
+                // 公式：当前进度 = (当前X值 / 终点X值)，拉伸比例 = 1 + 进度*(目标倍数-1)
+                float progress = currentX / endX;
+                float stretchScale = 1 + progress * 4; // 从1倍→5倍（可调整4这个数值）
+
+                // 应用拉伸效果
+                accelerateView.setScaleX(stretchScale);
+            });
+
+            // 启动动画
+            accelerateAnimator.start();
+        });
     }
 
     private void showConnectionActivity() {
@@ -279,16 +324,28 @@ public class MainActivity extends AppCompatActivity
                         case BluetoothHidService.STATUS.BLUETOOTH_DISCONNECTED: {
                             Log.d(TAG, "Bluetooth disconnected");
                             mBtHidConnectedFailed.setVisibility(VISIBLE);
+                            loadingLayout.setVisibility(INVISIBLE);
+                            accelerateAnimator.cancel();
+                            if (accelerateAnimator != null && accelerateAnimator.isRunning()) {
+                                accelerateAnimator.cancel();
+                            }
                             break;
                         }
                         case BluetoothHidService.STATUS.BLUETOOTH_CONNECTING: {
                             Log.d(TAG, "Bluetooth connecting");
                             mBtHidConnectedFailed.setVisibility(GONE);
+                            loadingLayout.setVisibility(VISIBLE);
+                            // 启动带拉长效果的加速动画
+                            startAccelerateAndStretchAnimation();
                             break;
                         }
                         case BluetoothHidService.STATUS.BLUETOOTH_CONNECTED: {
                             Log.d(TAG, "Bluetooth connected");
                             mBtHidConnectedFailed.setVisibility(GONE);
+                            loadingLayout.setVisibility(INVISIBLE);
+                            if (accelerateAnimator != null && accelerateAnimator.isRunning()) {
+                                accelerateAnimator.cancel();
+                            }
                             break;
                         }
                     }
@@ -364,42 +421,6 @@ public class MainActivity extends AppCompatActivity
         } else {
             selectDeviceName.setText(R.string.not_connected);
             mBtNotConnectedPrompt.setVisibility(VISIBLE);
-        }
-    }
-
-    /**
-     * 启动基础版横向伸缩反复动画
-     */
-    private void startHorizontalLoadingAnimation() {
-        // 若动画已在运行，直接返回
-        if (loadingAnimator != null && loadingAnimator.isRunning()) {
-            return;
-        }
-
-        // 核心：控制scaleX从0→1（全宽），再从1→0，无限循环
-        loadingAnimator = ValueAnimator.ofFloat(0f, 1f);
-        loadingAnimator.setDuration(1500); // 单次伸缩时长（毫秒），数值越小越快
-        loadingAnimator.setInterpolator(new LinearInterpolator()); // 线性插值器，匀速伸缩
-        loadingAnimator.setRepeatCount(ValueAnimator.INFINITE); // 无限循环（加载中持续运行）
-        loadingAnimator.setRepeatMode(ValueAnimator.REVERSE); // 反向重复（0→1→0，实现反复）
-
-        // 动画更新监听：更新加载条的横向缩放比例
-        loadingAnimator.addUpdateListener(animation -> {
-            float scaleX = (float) animation.getAnimatedValue();
-            loadingBar.setScaleX(scaleX);
-        });
-
-        // 启动动画
-        loadingAnimator.start();
-    }
-
-    /**
-     * 停止加载动画（加载完成时调用）
-     */
-    private void stopLoadingAnimation() {
-        if (loadingAnimator != null && loadingAnimator.isRunning()) {
-            loadingAnimator.cancel();
-            loadingBar.setScaleX(0); // 重置加载条为隐藏状态
         }
     }
 
@@ -495,6 +516,10 @@ public class MainActivity extends AppCompatActivity
         // 取消广播注册
         if (mBluetoothReceiver != null) {
             unregisterReceiver(mBluetoothReceiver);
+        }
+        if (accelerateAnimator != null) {
+            accelerateAnimator.cancel();
+            accelerateAnimator = null;
         }
     }
 

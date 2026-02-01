@@ -22,7 +22,7 @@ public class HomeFragment extends Fragment {
     private static final String TAG = "HomeFragment";
 
     private ImageView ivMousePointer;
-    private View scrollbar;
+    //private View scrollbar;
     private MaterialButton btnLeftClick;
     private MaterialButton btnRightClick;
     private PressureShadowView mouseArea;
@@ -47,7 +47,7 @@ public class HomeFragment extends Fragment {
 
     private void initViews(View view) {
         ivMousePointer = view.findViewById(R.id.iv_mouse_pointer);
-        scrollbar = view.findViewById(R.id.scrollbar);
+//        scrollbar = view.findViewById(R.id.scrollbar);
         btnLeftClick = view.findViewById(R.id.btn_left_click);
         btnRightClick = view.findViewById(R.id.btn_right_click);
         mouseArea = view.findViewById(R.id.mouse_area);
