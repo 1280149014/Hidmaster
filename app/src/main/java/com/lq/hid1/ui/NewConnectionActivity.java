@@ -36,10 +36,8 @@ public class NewConnectionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bluetooth_connection);
-
         // 初始化蓝牙适配器
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-
 
         TextView title = findViewById(R.id.dialog_title);
         TextView subtitle = findViewById(R.id.dialog_subtitle);

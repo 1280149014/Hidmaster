@@ -138,12 +138,12 @@ public class MainActivity extends AppCompatActivity
                 Toast.makeText(MainActivity.this, "Bluetooth not enabled, exiting now.", Toast.LENGTH_LONG).show();
             }
         });
-
         if (!bluetoothAdapter.isEnabled()) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && ActivityCompat.checkSelfPermission(this,
-                    Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && (ActivityCompat.checkSelfPermission(this,
+                    Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(this,
+                    Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED)) {
                 ActivityCompat.requestPermissions(MainActivity.this, new String[]{
-                        Manifest.permission.BLUETOOTH_CONNECT}, REQUEST_CODE_BLUETOOTH_CONNECT);
+                        Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.BLUETOOTH_SCAN}, REQUEST_CODE_BLUETOOTH_CONNECT);
             } else {
                 enableBT();
             }
@@ -404,17 +404,32 @@ public class MainActivity extends AppCompatActivity
         mDevicePopup.showAsDropDown(anchorView, 0, 0, Gravity.START);
     }
 
-    @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
     private void updateSelectedDeviceName() {
         BluetoothDevice lastConnectedDevice = null;
-        for (BluetoothDevice device : bluetoothAdapter.getBondedDevices()) {
-            String lastDeviceAddress = SharedPreferencesUtils.getLastDevice(getApplication());
-            if (device.getAddress().equals(lastDeviceAddress)) {
-                lastConnectedDevice = device;
-                break;
-            }
+        //for (BluetoothDevice device : bluetoothAdapter.getBondedDevices()) {
+        String lastDeviceAddress = SharedPreferencesUtils.getLastDevice(getApplication());
+        try {
+            lastConnectedDevice = bluetoothAdapter.getRemoteDevice(lastDeviceAddress);
+        } catch (Exception e) {
+            Log.e(TAG, "updateSelectedDeviceName aaaaaaa");
         }
+
+            //if (device.getAddress().equals(lastDeviceAddress)) {
+                //lastConnectedDevice = device;
+               // break;
+            //}
+        //}
         if (lastConnectedDevice != null) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
             selectDeviceName.setText(lastConnectedDevice.getName());
             mBtNotConnectedPrompt.setVisibility(GONE);
             return;

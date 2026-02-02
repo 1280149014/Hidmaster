@@ -26,7 +26,9 @@ public class HomeFragment extends Fragment {
     private MaterialButton btnLeftClick;
     private MaterialButton btnRightClick;
     private PressureShadowView mouseArea;
-
+    private View mUpView;
+    private View mDownView;
+    private View mLineView;
     private Handler handler = new Handler(Looper.getMainLooper());
 
     @Nullable
@@ -51,6 +53,7 @@ public class HomeFragment extends Fragment {
         btnLeftClick = view.findViewById(R.id.btn_left_click);
         btnRightClick = view.findViewById(R.id.btn_right_click);
         mouseArea = view.findViewById(R.id.mouse_area);
+        mUpView = view.findViewById(R.id.)
     }
 
     private void setupClickListeners() {

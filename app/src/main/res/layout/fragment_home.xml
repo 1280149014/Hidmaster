@@ -47,6 +47,7 @@
         android:orientation="horizontal"
         android:background="@color/background_white"
         android:paddingHorizontal="8dp"
+        android:layout_marginTop="@dimen/normal_margin6"
         android:gravity="center_horizontal"
         android:layout_marginBottom="12dp"
         android:paddingTop="0dp">
