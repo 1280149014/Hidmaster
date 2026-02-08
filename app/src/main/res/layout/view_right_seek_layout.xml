@@ -16,12 +16,12 @@
         android:src="@drawable/arrow_up"/>
 
     <View
-        android:layout_width="2dp"
+        android:layout_width="1.5dp"
         android:id="@+id/arrow_line"
         android:layout_height="wrap_content"
         android:layout_below="@id/arrow_up"
         android:layout_above="@id/arrow_down"
-        android:layout_marginVertical="@dimen/normal_margin"
+        android:layout_marginVertical="@dimen/normal_margin3"
         android:layout_centerHorizontal="true"
         android:background= "@color/white"/>
         />

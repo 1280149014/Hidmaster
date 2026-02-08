@@ -53,7 +53,9 @@ public class HomeFragment extends Fragment {
         btnLeftClick = view.findViewById(R.id.btn_left_click);
         btnRightClick = view.findViewById(R.id.btn_right_click);
         mouseArea = view.findViewById(R.id.mouse_area);
-        mUpView = view.findViewById(R.id.)
+        mUpView = view.findViewById(R.id.arrow_up);
+        mDownView = view.findViewById(R.id.arrow_down);
+        mLineView = view.findViewById(R.id.arrow_line);
     }
 
     private void setupClickListeners() {
