@@ -35,4 +35,6 @@
     <string name="connect">Connect</string>
     <string name="setup_remote_device">Setup remote device</string>
     <string name="unnamed_device">Unnamed device</string>
+    <string name="enable_bluetooth">Enable Bluetooth</string>
+    <string name="bluetooth_disabled_nenable_bluetooth_to_connect_to_a_device">Bluetooth disabled\nEnable Bluetooth to connect to a device.</string>
 </resources>
